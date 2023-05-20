@@ -17,5 +17,10 @@ public class Coordinates implements Serializable {
     public void setLng(float lng) {
         this.lng = lng;
     }
+    
+    @Override
+    public String toString() {
+        return "Coordinates [lat=" + lat + ", lng=" + lng + "]";
+    }
 
 }
