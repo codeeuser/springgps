@@ -1,12 +1,10 @@
 package com.wheref.springgps.controller;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -23,24 +21,23 @@ import com.wheref.springgps.model.Geometry;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/welcome")
+@RequestMapping("/api")
 public class WelcomeController {
 
-    @Value("classpath:files/trajectory.csv")
+    @Value("classpath:static/trajectory.csv")
     Resource trajectory;
 
     private Coordinates co;
 
     int fileLineNumber = 0;
     
-
     @Scheduled(fixedRate = 1000) // Milliseconds
     public void readLinesPeriodically() throws IOException {
         System.out.println("fileLineNumber: "+ fileLineNumber);
-        File file  = trajectory.getFile();
-        List<String> lines = FileUtils.readLines(file, "UTF-8");
-        String line = lines.get(fileLineNumber);
-        String[] arr = StringUtils.split(line, ","); 
+        String content = trajectory.getContentAsString(StandardCharsets.UTF_8);
+        String[] lines = content.split("\n");
+        if (lines.length==0) return;
+        String[] arr = StringUtils.split(lines[fileLineNumber], ","); 
 
         Coordinates coordinates = new Coordinates();
         coordinates.setLat(Float.parseFloat(arr[0]));
@@ -48,7 +45,7 @@ public class WelcomeController {
         this.co = coordinates;
 
         fileLineNumber++;
-        fileLineNumber = fileLineNumber % lines.size();
+        fileLineNumber = fileLineNumber % lines.length;
     }
 
     @GetMapping("/coordinate")
@@ -62,8 +59,7 @@ public class WelcomeController {
             coordinates.put("lat", 3.1390f);
             coordinates.put("lng", 101.6869f);
         }
-        Geometry geometry = new Geometry("Point", coordinates);
-		return geometry;
+        return new Geometry("Point", coordinates);
 	}
 
     @PostMapping(path="/postCoordinate", consumes = "application/json", produces = "application/json")

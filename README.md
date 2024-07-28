@@ -1,12 +1,19 @@
 # Simulate Live GPS Data for Testing
 
-## Sample Access URL
-http://localhost:8080/api/welcome/coordinate
+* Produce the Live Navigation GPS data based on the CSV file.
+* The Live GPS data would repeat after end of the CSV file.
 
+## Sample Access URL
+
+http://localhost:8087/api/coordinate
 
 ## Sample Returned Data Format
-- http://localhost:8080/api/welcome/coordinate
+
+- Return JSON format data
 - {"type":"Point","coordinates":{"lng":101.6869,"lat":3.139}}
 
 ## CLI
+
 - ./mvnw spring-boot:run
+- ./mvnw clean package
+- java -jar
