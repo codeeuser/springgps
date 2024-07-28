@@ -1,6 +1,6 @@
 # Simulate Live GPS Data for Testing
 
-* Produce the Live Navigation GPS data based on the CSV file.
+* Produce the Live Navigation GPS data based on the CSV file built with Spring Boot.
 * The Live GPS data would repeat after end of the CSV file.
 
 ## Sample Access URL
@@ -16,4 +16,4 @@ http://localhost:8087/api/coordinate
 
 - ./mvnw spring-boot:run
 - ./mvnw clean package
-- java -jar
+- java -jar springgps-0.0.1-SNAPSHOT.jar
